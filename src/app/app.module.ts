@@ -21,6 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { CharacterDetailComponent } from './components/character-detail/character-detail.component';
 import { CharacterSearchComponent } from './components/character-search/character-search.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     CharacterDetailComponent,
     CharacterSearchComponent,
     NotFoundComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

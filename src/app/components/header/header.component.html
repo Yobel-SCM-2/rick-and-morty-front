@@ -1,0 +1,24 @@
+<header class="app-header">
+  <div class="header-container">
+    <div class="logo" (click)="goHome()">
+      <img
+        src="assets/images/rick-and-morty-logo.png"
+        alt="Rick and Morty Logo"
+      />
+    </div>
+
+    <nav class="navigation">
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <mat-icon>home</mat-icon> Inicio
+      </a>
+      <a mat-button routerLink="/search" routerLinkActive="active">
+        <mat-icon>search</mat-icon> Buscar
+      </a>
+    </nav>
+  </div>
+</header>
