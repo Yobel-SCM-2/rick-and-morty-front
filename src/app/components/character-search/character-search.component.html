@@ -27,20 +27,18 @@
           </mat-form-field>
         </div>
 
-        <!-- Estado de carga -->
-        <div *ngIf="searching" class="search-status">
-          <mat-spinner diameter="24"></mat-spinner>
-          <span>Buscando personajes...</span>
-        </div>
+        <!-- Estado de carga y errores -->
+        <ng-container *ngIf="searchControl.value">
+          <div *ngIf="searching" class="search-status">
+            <mat-spinner diameter="24"></mat-spinner>
+            <span>Buscando personajes...</span>
+          </div>
 
-        <!-- Mensaje de error -->
-        <div
-          *ngIf="error && !searching && searchControl.value"
-          class="search-error"
-        >
-          <mat-icon color="warn">error</mat-icon>
-          <span>{{ errorMessage }}</span>
-        </div>
+          <div *ngIf="error && !searching" class="search-error">
+            <mat-icon color="warn">error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </ng-container>
 
         <!-- Resultados de la búsqueda -->
         <div *ngIf="characters.length > 0 && !searching" class="search-results">
@@ -84,7 +82,6 @@
 
       <!-- Búsqueda por ID -->
       <mat-tab label="Buscar por ID">
-        <!-- Puedes prescindir del <form> si no necesitas el submit global -->
         <div class="search-form">
           <mat-form-field appearance="outline" class="search-input">
             <mat-label>ID del personaje</mat-label>
@@ -118,20 +115,18 @@
           </button>
         </div>
 
-        <!-- Estado de carga -->
-        <div *ngIf="loading" class="search-status">
-          <mat-spinner diameter="24"></mat-spinner>
-          <span>Buscando personaje...</span>
-        </div>
+        <!-- Estado de carga y errores -->
+        <ng-container *ngIf="idSearchControl.value">
+          <div *ngIf="loading" class="search-status">
+            <mat-spinner diameter="24"></mat-spinner>
+            <span>Buscando personaje...</span>
+          </div>
 
-        <!-- Mensaje de error -->
-        <div
-          *ngIf="error && !loading && idSearchControl.value"
-          class="search-error"
-        >
-          <mat-icon color="warn">error</mat-icon>
-          <span>{{ errorMessage }}</span>
-        </div>
+          <div *ngIf="error && !loading" class="search-error">
+            <mat-icon color="warn">error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </ng-container>
       </mat-tab>
     </mat-tab-group>
   </div>
