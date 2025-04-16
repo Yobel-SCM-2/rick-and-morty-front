@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -19,6 +19,9 @@ import { PdfService } from '../../services/pdf.service';
   styleUrls: ['./character-search.component.scss'],
 })
 export class CharacterSearchComponent implements OnInit {
+  @ViewChild('selectedCharacterContent')
+  selectedCharacterContent!: ElementRef;
+
   searchControl = new FormControl('');
   idSearchControl = new FormControl('');
   characters: Character[] = [];
@@ -144,8 +147,11 @@ export class CharacterSearchComponent implements OnInit {
    * Descarga los detalles del personaje en PDF
    */
   downloadPDF(): void {
-    if (this.selectedCharacter) {
-      this.pdfService.generateCharacterPDF(this.selectedCharacter);
+    if (this.selectedCharacter && this.selectedCharacterContent) {
+      this.pdfService.generatePDFFromHTML(
+        this.selectedCharacterContent,
+        this.selectedCharacter
+      );
     }
   }
 

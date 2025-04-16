@@ -27,7 +27,7 @@
   </div>
 
   <!-- Detalles del personaje -->
-  <div *ngIf="character && !loading && !error" class="character-content">
+  <div *ngIf="character && !loading && !error" #characterContent class="character-content">
     <div class="character-header">
       <h1 class="character-name">{{ character.name }}</h1>
       <button

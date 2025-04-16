@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Character } from '../../models/character.model';
 import { CharacterService } from '../../services/character.service';
@@ -12,6 +12,8 @@ import { Location } from '@angular/common';
   styleUrls: ['./character-detail.component.scss'],
 })
 export class CharacterDetailComponent implements OnInit {
+  @ViewChild('characterContent')
+  characterContent!: ElementRef;
   character: Character | null = null;
   loading = true;
   error = false;
@@ -65,8 +67,11 @@ export class CharacterDetailComponent implements OnInit {
    * Genera y descarga un PDF con la información del personaje
    */
   downloadPDF(): void {
-    if (this.character) {
-      this.pdfService.generateCharacterPDF(this.character);
+    if (this.character && this.characterContent) {
+      this.pdfService.generatePDFFromHTML(
+        this.characterContent,
+        this.character
+      );
     }
   }
 
