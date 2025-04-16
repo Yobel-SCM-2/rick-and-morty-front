@@ -20,6 +20,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CharacterDetailComponent } from './components/character-detail/character-detail.component';
 import { CharacterSearchComponent } from './components/character-search/character-search.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { CharacterSearchComponent } from './components/character-search/characte
     CharacterListComponent,
     CharacterDetailComponent,
     CharacterSearchComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
