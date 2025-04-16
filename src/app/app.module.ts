@@ -18,9 +18,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { CharacterDetailComponent } from './components/character-detail/character-detail.component';
 
 @NgModule({
-  declarations: [AppComponent, CharacterListComponent],
+  declarations: [
+    AppComponent,
+    CharacterListComponent,
+    CharacterDetailComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
