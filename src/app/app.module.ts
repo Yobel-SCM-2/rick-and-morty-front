@@ -22,6 +22,7 @@ import { CharacterDetailComponent } from './components/character-detail/characte
 import { CharacterSearchComponent } from './components/character-search/character-search.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { HeaderComponent } from './components/header/header.component';
     CharacterSearchComponent,
     NotFoundComponent,
     HeaderComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
