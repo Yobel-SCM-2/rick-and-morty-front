@@ -1,0 +1,112 @@
+<div class="character-detail-container">
+  <!-- Botón para volver -->
+  <button mat-icon-button class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <!-- Spinner de carga -->
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+    <p>Cargando detalles del personaje...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !loading" class="error-container">
+    <div class="error-message">
+      <mat-icon>error</mat-icon>
+      <p>No se pudieron cargar los detalles del personaje</p>
+      <div class="error-actions">
+        <button mat-raised-button color="primary" (click)="retryLoading()">
+          <mat-icon>refresh</mat-icon> Intentar de nuevo
+        </button>
+        <button mat-raised-button color="accent" (click)="goBack()">
+          <mat-icon>home</mat-icon> Volver a la lista
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detalles del personaje -->
+  <div *ngIf="character && !loading && !error" class="character-content">
+    <div class="character-header">
+      <h1 class="character-name">{{ character.name }}</h1>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="downloadPDF()"
+        class="download-button"
+      >
+        <mat-icon>file_download</mat-icon> Descargar PDF
+      </button>
+    </div>
+
+    <div class="character-info-container">
+      <!-- Imagen del personaje -->
+      <div class="character-image">
+        <img [src]="character.image" [alt]="character.name" />
+        <div class="character-status">
+          <span
+            class="status-dot"
+            [ngClass]="{
+              'status-alive': character.status === 'Alive',
+              'status-dead': character.status === 'Dead',
+              'status-unknown': character.status === 'unknown'
+            }"
+          ></span>
+          {{ character.status }} - {{ character.species }}
+        </div>
+      </div>
+
+      <!-- Información del personaje -->
+      <div class="character-details">
+        <mat-card>
+          <mat-card-content>
+            <h2>Información del personaje</h2>
+
+            <div class="info-group">
+              <div class="info-item">
+                <span class="info-label">Gender</span>
+                <span class="info-value">{{ character.gender }}</span>
+              </div>
+
+              <div class="info-item">
+                <span class="info-label">Species</span>
+                <span class="info-value">{{ character.species }}</span>
+              </div>
+
+              <div *ngIf="character.type" class="info-item">
+                <span class="info-label">Type</span>
+                <span class="info-value">{{ character.type }}</span>
+              </div>
+
+              <div class="info-item">
+                <span class="info-label">Origin</span>
+                <span class="info-value">{{ character.origin.name }}</span>
+              </div>
+
+              <div class="info-item">
+                <span class="info-label">Location</span>
+                <span class="info-value">{{ character.location.name }}</span>
+              </div>
+
+              <div class="info-item">
+                <span class="info-label">Created</span>
+                <span class="info-value">{{ character.created | date }}</span>
+              </div>
+            </div>
+
+            <h2>Episodios</h2>
+            <div class="episodes-list">
+              <div
+                class="episode-chip"
+                *ngFor="let episode of character.episode"
+              >
+                <span>Episodio {{ getEpisodeNumber(episode) }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

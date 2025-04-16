@@ -1,0 +1,205 @@
+<div class="search-container">
+  <h1 class="page-title">Búsqueda de Personajes</h1>
+
+  <div class="search-tabs">
+    <mat-tab-group animationDuration="300ms">
+      <!-- Búsqueda por nombre -->
+      <mat-tab label="Buscar por Nombre">
+        <div class="search-form">
+          <mat-form-field appearance="outline" class="search-input">
+            <mat-label>Nombre del personaje</mat-label>
+            <input
+              matInput
+              [formControl]="searchControl"
+              placeholder="Ej: Rick, Morty, Beth..."
+              (input)="search(searchControl.value!)"
+              autocomplete="off"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              *ngIf="searchControl.value"
+              (click)="clearSearch()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-hint>Ingresa al menos 2 caracteres para buscar</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Estado de carga -->
+        <div *ngIf="searching" class="search-status">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Buscando personajes...</span>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div
+          *ngIf="error && !searching && searchControl.value"
+          class="search-error"
+        >
+          <mat-icon color="warn">error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <!-- Resultados de la búsqueda -->
+        <div *ngIf="characters.length > 0 && !searching" class="search-results">
+          <div class="results-header">
+            <h2>Resultados</h2>
+            <span class="results-count"
+              >{{ characters.length }} personajes encontrados</span
+            >
+          </div>
+
+          <div class="results-grid">
+            <mat-card
+              class="character-card"
+              *ngFor="let character of characters"
+              (click)="selectCharacter(character)"
+              [class.selected]="selectedCharacter?.id === character.id"
+            >
+              <img
+                mat-card-image
+                [src]="character.image"
+                [alt]="character.name"
+              />
+              <mat-card-content>
+                <h3>{{ character.name }}</h3>
+                <div
+                  class="status-badge"
+                  [ngClass]="{
+                    alive: character.status === 'Alive',
+                    dead: character.status === 'Dead',
+                    unknown: character.status === 'unknown'
+                  }"
+                >
+                  {{ character.status }}
+                </div>
+                <p class="species">{{ character.species }}</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Búsqueda por ID -->
+      <mat-tab label="Buscar por ID">
+        <form (ngSubmit)="onSearchById()" class="search-form">
+          <mat-form-field appearance="outline" class="search-input">
+            <mat-label>ID del personaje</mat-label>
+            <input
+              matInput
+              [formControl]="idSearchControl"
+              type="number"
+              min="1"
+              placeholder="Ej: 1, 2, 3..."
+              autocomplete="off"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              *ngIf="idSearchControl.value"
+              (click)="clearSearch()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-hint>Ingresa el ID numérico del personaje</mat-hint>
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!idSearchControl.value"
+          >
+            <mat-icon>search</mat-icon> Buscar
+          </button>
+        </form>
+
+        <!-- Estado de carga -->
+        <div *ngIf="loading" class="search-status">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Buscando personaje...</span>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div
+          *ngIf="error && !loading && idSearchControl.value"
+          class="search-error"
+        >
+          <mat-icon color="warn">error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!-- Detalle del personaje seleccionado -->
+  <div *ngIf="selectedCharacter" class="selected-character">
+    <div class="character-header">
+      <h2>{{ selectedCharacter.name }}</h2>
+      <button mat-raised-button color="primary" (click)="downloadPDF()">
+        <mat-icon>file_download</mat-icon> Descargar PDF
+      </button>
+    </div>
+
+    <div class="character-detail">
+      <div class="character-image">
+        <img [src]="selectedCharacter.image" [alt]="selectedCharacter.name" />
+      </div>
+
+      <div class="character-info">
+        <div class="status-section">
+          <div
+            class="status-badge"
+            [ngClass]="{
+              alive: selectedCharacter.status === 'Alive',
+              dead: selectedCharacter.status === 'Dead',
+              unknown: selectedCharacter.status === 'unknown'
+            }"
+          >
+            {{ selectedCharacter.status }}
+          </div>
+          <span class="species">{{ selectedCharacter.species }}</span>
+          <span *ngIf="selectedCharacter.type" class="type">{{
+            selectedCharacter.type
+          }}</span>
+        </div>
+
+        <div class="info-section">
+          <div class="info-item">
+            <div class="info-label">Género</div>
+            <div class="info-value">{{ selectedCharacter.gender }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Origen</div>
+            <div class="info-value">{{ selectedCharacter.origin.name }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Ubicación actual</div>
+            <div class="info-value">{{ selectedCharacter.location.name }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Aparece en</div>
+            <div class="info-value">
+              {{ selectedCharacter.episode.length }} episodios
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">ID</div>
+            <div class="info-value">{{ selectedCharacter.id }}</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Creado</div>
+            <div class="info-value">{{ selectedCharacter.created | date }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

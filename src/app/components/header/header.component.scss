@@ -1,0 +1,77 @@
+.app-header {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.logo {
+  cursor: pointer;
+
+  img {
+    height: 50px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+
+  a {
+    display: flex;
+    align-items: center;
+    color: #2c3e50;
+    font-weight: 500;
+    transition: color 0.3s ease;
+
+    mat-icon {
+      margin-right: 5px;
+    }
+
+    &:hover {
+      color: #16a085;
+    }
+
+    &.active {
+      color: #16a085;
+      font-weight: 700;
+    }
+  }
+}
+
+// Responsive design
+@media screen and (max-width: 600px) {
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  .navigation {
+    width: 100%;
+    justify-content: center;
+
+    a {
+      padding: 8px 15px;
+    }
+  }
+}
