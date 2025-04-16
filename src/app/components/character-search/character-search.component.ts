@@ -101,27 +101,17 @@ export class CharacterSearchComponent implements OnInit {
    * Maneja el evento del formulario de búsqueda por ID.
    * Se añade el parámetro event y se llama a preventDefault para evitar que se recargue la página.
    */
-  // Función que se dispara al hacer submit en el formulario de búsqueda por ID.
   onSearchById(event: Event): void {
-    // Evita que el formulario realice el submit predeterminado (recarga la página)
-    // event.preventDefault();
-    console.log('Evento submit capturado, iniciando búsqueda por ID.');
-
     // Se obtiene el valor ingresado en el formulario
     const idValue = this.idSearchControl.value;
-    console.log('Valor ingresado en idSearchControl:', idValue);
 
     // Se convierte el valor a número
     const id = Number(idValue);
     if (id && !isNaN(id)) {
-      console.log('ID válido recibido:', id);
-      // Se marca que la búsqueda por ID se inició desde el formulario,
-      // para evitar que la suscripción a queryParams dispare otra búsqueda.
       this.isSearchingById = true;
 
       // Se actualizan los query params para reflejar el ID en la URL
       this.updateQueryParams({ id: id.toString(), name: null });
-      console.log('Query params actualizados con id:', id);
 
       // Se procede con la búsqueda mediante el servicio
       this.searchById(id);
@@ -140,13 +130,11 @@ export class CharacterSearchComponent implements OnInit {
     this.error = false;
     this.characters = [];
     this.selectedCharacter = null;
-    console.log('Iniciando búsqueda del personaje con ID:', id);
 
     this.characterService.getCharacterById(id).subscribe({
       next: (character) => {
         this.selectedCharacter = character;
         this.loading = false;
-        console.log('Personaje encontrado:', character);
       },
       error: (error) => {
         this.loading = false;
@@ -208,7 +196,6 @@ export class CharacterSearchComponent implements OnInit {
       queryParams['id'] = params.id;
     }
 
-    console.log('Actualizando query params:', queryParams);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
