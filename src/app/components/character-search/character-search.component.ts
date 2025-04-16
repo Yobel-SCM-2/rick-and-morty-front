@@ -7,7 +7,7 @@ import {
   filter,
   switchMap,
 } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Character } from '../../models/character.model';
 import { CharacterService } from '../../services/character.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
@@ -33,6 +33,7 @@ export class CharacterSearchComponent implements OnInit {
   errorMessage = '';
 
   private searchTerms = new Subject<string>();
+  private isSearchingById: boolean = false;
 
   constructor(
     private characterService: CharacterService,
@@ -43,19 +44,12 @@ export class CharacterSearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Configurar la búsqueda reactiva
+    // Configurar la búsqueda reactiva por nombre
     this.searchTerms
       .pipe(
-        // Esperar 300ms después de cada pulsación
         debounceTime(300),
-
-        // Ignorar si el término de búsqueda es el mismo
         distinctUntilChanged(),
-
-        // Solo procesar si el término tiene al menos 2 caracteres
         filter((term) => term.length >= 2),
-
-        // Cambiar a una nueva búsqueda observable
         switchMap((term) => {
           this.searching = true;
           this.error = false;
@@ -76,14 +70,19 @@ export class CharacterSearchComponent implements OnInit {
         },
       });
 
-    // Verificar si hay parámetros de búsqueda en la URL
+    // Suscribirse a los parámetros de la URL
     this.route.queryParams.subscribe((params) => {
-      if (params['name']) {
+      if (params['name'] && params['name'] !== this.searchControl.value) {
         this.searchControl.setValue(params['name']);
         this.search(params['name']);
       } else if (params['id'] && !isNaN(+params['id'])) {
-        this.idSearchControl.setValue(params['id']);
-        this.searchById(+params['id']);
+        // Si la búsqueda fue activada intencionalmente, no se vuelve a ejecutar
+        if (!this.isSearchingById) {
+          this.idSearchControl.setValue(params['id']);
+          this.searchById(+params['id']);
+        } else {
+          this.isSearchingById = false;
+        }
       }
     });
   }
@@ -94,45 +93,69 @@ export class CharacterSearchComponent implements OnInit {
    */
   search(term: string): void {
     this.searchTerms.next(term);
+    // Actualiza los query parameters solo para la búsqueda por nombre
     this.updateQueryParams({ name: term, id: null });
   }
 
   /**
-   * Busca un personaje por ID
-   * @param id ID del personaje
+   * Maneja el evento del formulario de búsqueda por ID.
+   * Se añade el parámetro event y se llama a preventDefault para evitar que se recargue la página.
    */
-  searchById(id: number): void {
+  // Función que se dispara al hacer submit en el formulario de búsqueda por ID.
+  onSearchById(event: Event): void {
+    // Evita que el formulario realice el submit predeterminado (recarga la página)
+    // event.preventDefault();
+    console.log('Evento submit capturado, iniciando búsqueda por ID.');
+
+    // Se obtiene el valor ingresado en el formulario
+    const idValue = this.idSearchControl.value;
+    console.log('Valor ingresado en idSearchControl:', idValue);
+
+    // Se convierte el valor a número
+    const id = Number(idValue);
     if (id && !isNaN(id)) {
-      this.loading = true;
-      this.error = false;
-      this.characters = [];
-      this.selectedCharacter = null;
+      console.log('ID válido recibido:', id);
+      // Se marca que la búsqueda por ID se inició desde el formulario,
+      // para evitar que la suscripción a queryParams dispare otra búsqueda.
+      this.isSearchingById = true;
 
-      this.characterService.getCharacterById(id).subscribe({
-        next: (character) => {
-          this.selectedCharacter = character;
-          this.loading = false;
-        },
-        error: (error) => {
-          this.loading = false;
-          this.error = true;
-          this.errorMessage = 'No se encontró ningún personaje con ese ID';
-          this.errorHandler.handleError(error, false);
-        },
-      });
-
+      // Se actualizan los query params para reflejar el ID en la URL
       this.updateQueryParams({ id: id.toString(), name: null });
+      console.log('Query params actualizados con id:', id);
+
+      // Se procede con la búsqueda mediante el servicio
+      this.searchById(id);
+    } else {
+      console.error('El ID ingresado es inválido:', idValue);
     }
   }
 
   /**
-   * Maneja el evento del formulario de búsqueda por ID
+   * Realiza la búsqueda de un personaje por ID llamando al servicio
+   * @param id ID del personaje
    */
-  onSearchById(): void {
-    const id = this.idSearchControl.value;
-    if (id && !isNaN(+id)) {
-      this.searchById(+id);
-    }
+  // Función que se encarga de llamar al servicio para realizar la búsqueda por ID.
+  searchById(id: number): void {
+    this.loading = true;
+    this.error = false;
+    this.characters = [];
+    this.selectedCharacter = null;
+    console.log('Iniciando búsqueda del personaje con ID:', id);
+
+    this.characterService.getCharacterById(id).subscribe({
+      next: (character) => {
+        this.selectedCharacter = character;
+        this.loading = false;
+        console.log('Personaje encontrado:', character);
+      },
+      error: (error) => {
+        this.loading = false;
+        this.error = true;
+        this.errorMessage = 'No se encontró ningún personaje con ese ID';
+        console.error('Error al buscar el personaje:', error);
+        this.errorHandler.handleError(error, false);
+      },
+    });
   }
 
   /**
@@ -156,7 +179,7 @@ export class CharacterSearchComponent implements OnInit {
   }
 
   /**
-   * Limpia la búsqueda
+   * Limpia la búsqueda (ambos modos)
    */
   clearSearch(): void {
     this.searchControl.setValue('');
@@ -171,6 +194,7 @@ export class CharacterSearchComponent implements OnInit {
    * Actualiza los parámetros de la URL
    * @param params Parámetros de consulta
    */
+  // Función que se encarga de actualizar la URL con los query params
   private updateQueryParams(params: {
     name: string | null;
     id: string | null;
@@ -180,11 +204,11 @@ export class CharacterSearchComponent implements OnInit {
     if (params.name) {
       queryParams['name'] = params.name;
     }
-
     if (params.id) {
       queryParams['id'] = params.id;
     }
 
+    console.log('Actualizando query params:', queryParams);
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,

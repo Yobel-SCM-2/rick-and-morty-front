@@ -46,9 +46,9 @@
         <div *ngIf="characters.length > 0 && !searching" class="search-results">
           <div class="results-header">
             <h2>Resultados</h2>
-            <span class="results-count"
-              >{{ characters.length }} personajes encontrados</span
-            >
+            <span class="results-count">
+              {{ characters.length }} personajes encontrados
+            </span>
           </div>
 
           <div class="results-grid">
@@ -84,7 +84,8 @@
 
       <!-- Búsqueda por ID -->
       <mat-tab label="Buscar por ID">
-        <form (ngSubmit)="onSearchById()" class="search-form">
+        <!-- Puedes prescindir del <form> si no necesitas el submit global -->
+        <div class="search-form">
           <mat-form-field appearance="outline" class="search-input">
             <mat-label>ID del personaje</mat-label>
             <input
@@ -109,12 +110,13 @@
           <button
             mat-raised-button
             color="primary"
-            type="submit"
+            type="button"
+            (click)="onSearchById($event)"
             [disabled]="!idSearchControl.value"
           >
             <mat-icon>search</mat-icon> Buscar
           </button>
-        </form>
+        </div>
 
         <!-- Estado de carga -->
         <div *ngIf="loading" class="search-status">
