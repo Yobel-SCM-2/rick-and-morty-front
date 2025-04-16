@@ -19,12 +19,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CharacterDetailComponent } from './components/character-detail/character-detail.component';
+import { CharacterSearchComponent } from './components/character-search/character-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CharacterListComponent,
     CharacterDetailComponent,
+    CharacterSearchComponent,
   ],
   imports: [
     BrowserModule,
