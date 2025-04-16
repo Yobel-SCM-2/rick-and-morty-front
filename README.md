@@ -1,27 +1,178 @@
-# RickAndMortyFront
+# 🌀 Rick and Morty API Frontend (Angular)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+> Interfaz web creada con Angular que consume datos de la API de Rick and Morty mediante un backend reactivo con Spring WebFlux.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🚀 Tecnologías utilizadas
 
-## Code scaffolding
+- 🅰️ **Angular 16**
+- 🧠 **TypeScript**
+- 🎨 **Angular Material** (UI moderna y responsiva)
+- 🔁 **RxJS** (programación reactiva)
+- 🧾 **PDFMake** para generación de PDFs
+- 🧪 **Jasmine** y **Karma** para pruebas unitarias
+- 💅 **HTML5 + SCSS** para diseño responsivo
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## ✅ Funcionalidades implementadas
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 🧬 Modelado de datos
 
-## Running unit tests
+- Interfaces para `Character`, `Location`, `Episode` y `Origin`.
+- Modelos optimizados para consumo desde el backend.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 🖼️ Construcción de vistas
 
-## Running end-to-end tests
+- Página principal con listado paginado de personajes.
+- Componentes reutilizables: `Header`, `Footer`, `CharacterDetail`, etc.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### 🔍 Búsqueda de personajes
 
-## Further help
+- Por nombre o ID.
+- Resultados detallados con opción de exportar como PDF.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### 🚫 Página 404
+
+- Página de error personalizada para rutas no válidas.
+
+### 📱 Diseño responsivo
+
+- Adaptación a dispositivos móviles y escritorio usando Flexbox y CSS Grid.
+
+### ⚠️ Gestión de errores
+
+- Manejo centralizado mediante `ErrorHandlerService`.
+- Mensajes visuales claros y opciones de recuperación.
+
+### 🧪 Testing
+
+- Pruebas unitarias con **Jasmine** y **Karma**.
+- Cobertura en componentes y servicios clave.
+- Uso de **Mocks** para simular respuestas del backend.
+
+---
+
+## 🧾 Estructura del proyecto
+
+```
+rick-and-morty-app/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── character-list/
+│   │   │   ├── character-search/
+│   │   │   ├── character-detail/
+│   │   │   ├── header/
+│   │   │   ├── footer/
+│   │   │   └── not-found/
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── app-routing.module.ts
+│   │   └── app.module.ts
+├── assets/
+│   └── images/
+├── environments/
+├── index.html
+├── styles.scss
+└── main.ts
+```
+
+---
+
+## 🌟 Características destacadas
+
+- ✅ **Listado paginado de personajes**
+- ✅ **Búsqueda avanzada con filtros**
+- ✅ **Detalles completos y exportación a PDF**
+- ✅ **Diseño UI responsivo y moderno**
+- ✅ **Manejo robusto de errores**
+- ✅ **Pruebas unitarias con buena cobertura**
+
+---
+
+## 📸 Pantallas de la aplicación
+
+- 🏠 **Inicio**: Lista de personajes paginada
+- 🔍 **Búsqueda**: Por nombre o ID
+- 👤 **Detalle**: Información extendida de cada personaje
+- ❌ **404**: Página personalizada para rutas inexistentes
+
+---
+
+## ⚙️ Configuración e instalación
+
+### 📌 Requisitos previos
+
+- **Node.js 14+**
+- **npm 6+**
+- **Angular CLI 16+**
+
+### 🛠️ Instrucciones
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/Yobel-SCM-2/rick-and-morty-front.git
+cd rick-and-morty-front
+
+# Instalar dependencias
+npm install
+
+# Configurar la URL del backend
+# Editar: src/environments/environment.ts
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'
+};
+
+# Ejecutar en modo desarrollo
+ng serve
+# Disponible en: http://localhost:4200
+
+# Compilar para producción
+ng build --prod
+
+# Ejecutar pruebas
+ng test
+```
+
+---
+
+## 🖥️ Integración con el backend
+
+Este frontend se conecta con el backend disponible en:
+
+[**Rick and Morty Backend (Spring WebFlux)**](https://github.com/Yobel-SCM-2/rick-and-morty-back)
+
+> Se recomienda ejecutar ambos proyectos simultáneamente para una experiencia completa.
+
+---
+
+## 📦 Dependencias principales
+
+```json
+"dependencies": {
+    "@angular/animations": "^16.2.0",
+    "@angular/cdk": "^16.2.14",
+    "@angular/common": "^16.2.0",
+    "@angular/compiler": "^16.2.0",
+    "@angular/core": "^16.2.0",
+    "@angular/forms": "^16.2.0",
+    "@angular/material": "^16.2.14",
+    "@angular/platform-browser": "^16.2.0",
+    "@angular/platform-browser-dynamic": "^16.2.0",
+    "@angular/router": "^16.2.0",
+    "html2canvas": "^1.4.1",
+    "pdfmake": "^0.1.72",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.13.0"
+  }
+```
+
+---
+
+## 📬 Contacto
+
+¿Tienes dudas o sugerencias sobre el proyecto? ¡No dudes en escribirme!
